@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nirina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cream: #FFF6F0;
+    --peach: #FFDCC9;
+    --coral: #E8734F;
+    --plum: #4A3B52;
+    --gold: #E3AA4A;
+    --ink: #3D2E2A;
+    --ink-soft: #7A645E;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection{ background: var(--coral); color: var(--cream); }
+
+  :focus-visible{
+    outline: 2px solid var(--plum);
+    outline-offset: 3px;
+  }
+
+  .vh-input{
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* ---------- Preloader wrapper (pure CSS, no JS needed) ---------- */
+  /* This is what makes the loader full-screen and makes it
+     disappear after 5 seconds. Everything inside it is just
+     the visual you designed. */
+
+  .preloader{
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--plum);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: preloader-hide 5s ease forwards;
+  }
+
+  @keyframes preloader-hide{
+    0%, 88% { opacity: 1; visibility: visible; pointer-events: auto; }
+    100%    { opacity: 0; visibility: hidden;  pointer-events: none; }
+  }
+
+  .loader {
+    --main-size: 4em;
+    --text-color: #ffffff;
+    --shine-color: #ffffff40;
+    --shadow-color: #aaaaaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+    position: relative;
+    font-size: var(--main-size);
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--text-color);
+    width: 7.3em;
+    height: 1em;
+    filter: drop-shadow(0 0 0.05em var(--shine-color));
+  }
+
+  .loader .text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    position: absolute;
+  }
+
+  .loader .text:nth-child(1) {
+    clip-path: polygon(0% 0%, 11.11% 0%, 11.11% 100%, 0% 100%);
+    font-size: calc(var(--main-size) / 20);
+    margin-left: -2.1em;
+    opacity: 0.6;
+  }
+
+  .loader .text:nth-child(2) {
+    clip-path: polygon(11.11% 0%, 22.22% 0%, 22.22% 100%, 11.11% 100%);
+    font-size: calc(var(--main-size) / 16);
+    margin-left: -0.98em;
+    opacity: 0.7;
+  }
+
+  .loader .text:nth-child(3) {
+    clip-path: polygon(22.22% 0%, 33.33% 0%, 33.33% 100%, 22.22% 100%);
+    font-size: calc(var(--main-size) / 13);
+    margin-left: -0.33em;
+    opacity: 0.8;
+  }
+
+  .loader .text:nth-child(4) {
+    clip-path: polygon(33.33% 0%, 44.44% 0%, 44.44% 100%, 33.33% 100%);
+    font-size: calc(var(--main-size) / 11);
+    margin-left: -0.05em;
+    opacity: 0.9;
+  }
+
+  .loader .text:nth-child(5) {
+    clip-path: polygon(44.44% 0%, 55.55% 0%, 55.55% 100%, 44.44% 100%);
+    font-size: calc(var(--main-size) / 10);
+    margin-left: 0em;
+    opacity: 1;
+  }
+
+  .loader .text:nth-child(6) {
+    clip-path: polygon(55.55% 0%, 66.66% 0%, 66.66% 100%, 55.55% 100%);
+    font-size: calc(var(--main-size) / 11);
+    margin-left: 0.05em;
+    opacity: 0.9;
+  }
+
+  .loader .text:nth-child(7) {
+    clip-path: polygon(66.66% 0%, 77.77% 0%, 77.77% 100%, 66.66% 100%);
+    font-size: calc(var(--main-size) / 13);
+    margin-left: 0.33em;
+    opacity: 0.8;
+  }
+
+  .loader .text:nth-child(8) {
+    clip-path: polygon(77.77% 0%, 88.88% 0%, 88.88% 100%, 77.77% 100%);
+    font-size: calc(var(--main-size) / 16);
+    margin-left: 0.98em;
+    opacity: 0.7;
+  }
+
+  .loader .text:nth-child(9) {
+    clip-path: polygon(88.88% 0%, 100% 0%, 100% 100%, 88.88% 100%);
+    font-size: calc(var(--main-size) / 20);
+    margin-left: 2.1em;
+    opacity: 0.6;
+  }
+
+  .loader .text span {
+    animation:
+      scrolling 2s cubic-bezier(0.1, 0.6, 0.9, 0.4) infinite,
+      shadow 2s cubic-bezier(0.1, 0.6, 0.9, 0.4) infinite;
+  }
+
+  .loader .text:nth-child(1) span {
+    background: linear-gradient(to right, var(--text-color) 4%, var(--shadow-color) 7%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(2) span {
+    background: linear-gradient(to right, var(--text-color) 9%, var(--shadow-color) 13%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(3) span {
+    background: linear-gradient(to right, var(--text-color) 15%, var(--shadow-color) 18%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(4) span {
+    background: linear-gradient(to right, var(--text-color) 20%, var(--shadow-color) 23%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(6) span {
+    background: linear-gradient(to right, var(--shadow-color) 29%, var(--text-color) 32%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(7) span {
+    background: linear-gradient(to right, var(--shadow-color) 34%, var(--text-color) 37%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(8) span {
+    background: linear-gradient(to right, var(--shadow-color) 39%, var(--text-color) 42%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .text:nth-child(9) span {
+    background: linear-gradient(to right, var(--shadow-color) 45%, var(--text-color) 48%);
+    background-size: 200% auto;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .loader .line {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    height: 0.05em;
+    width: calc(var(--main-size) / 2);
+    margin-top: 0.9em;
+    border-radius: 0.05em;
+  }
+
+  .loader .line::before {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: var(--text-color);
+    opacity: 0.3;
+  }
+
+  .loader .line::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: var(--text-color);
+    border-radius: 0.05em;
+    transform: translateX(-90%);
+    animation: wobble 2s cubic-bezier(0.5, 0.8, 0.5, 0.2) infinite;
+  }
+
+  @keyframes wobble {
+    0%   { transform: translateX(-90%); }
+    50%  { transform: translateX(90%); }
+    100% { transform: translateX(-90%); }
+  }
+
+  @keyframes scrolling {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes shadow {
+    0%   { background-position: -98% 0; }
+    100% { background-position: 102% 0; }
+  }
+
+  /* ---------- Ambient dots (decorative, pure CSS animation) ---------- */
+
+  .drift-layer{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+
+  .dot{
+    position: absolute;
+    top: -6vh;
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: fall linear infinite;
+  }
+
+  .dot:nth-child(1){ left: 8%;  width: 8px;  height: 8px;  background: var(--coral); animation-duration: 17s; }
+  .dot:nth-child(2){ left: 22%; width: 12px; height: 12px; background: var(--gold);  animation-duration: 22s; animation-delay: 2s; }
+  .dot:nth-child(3){ left: 40%; width: 7px;  height: 7px;  background: var(--plum);  animation-duration: 15s; animation-delay: 5s; }
+  .dot:nth-child(4){ left: 58%; width: 10px; height: 10px; background: var(--coral); animation-duration: 20s; animation-delay: 1s; }
+  .dot:nth-child(5){ left: 74%; width: 9px;  height: 9px;  background: var(--gold);  animation-duration: 18s; animation-delay: 4s; }
+  .dot:nth-child(6){ left: 88%; width: 11px; height: 11px; background: var(--plum);  animation-duration: 24s; animation-delay: 3s; }
+
+  @keyframes fall{
+    0%   { transform: translateY(0) rotate(0deg);      opacity: 0; }
+    10%  { opacity: 0.4; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(112vh) rotate(120deg); opacity: 0; }
+  }
+
+  main{ position: relative; z-index: 1; }
+
+  section{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8vh 6vw;
+    text-align: center;
+  }
+
+  @keyframes rise{
+    from{ opacity: 0; transform: translateY(16px); }
+    to  { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero .photo-frame{
+    width: clamp(110px, 20vw, 150px);
+    height: clamp(110px, 20vw, 150px);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--coral);
+    box-shadow: 0 14px 32px -16px rgba(232, 115, 79, 0.55);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: rise 0.9s ease-out 0s forwards;
+  }
+
+  .hero .photo-frame img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero .tag{
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    letter-spacing: 0.06em;
+    color: var(--coral);
+    opacity: 0;
+    animation: rise 0.9s ease-out 0.2s forwards;
+  }
+
+  .hero h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 7.5vw, 4.6rem);
+    line-height: 1.05;
+    color: var(--plum);
+    margin-top: 0.5rem;
+    opacity: 0;
+    animation: rise 0.9s ease-out 0.4s forwards;
+  }
+
+  .hero h1 em{
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .hero p{
+    max-width: 36ch;
+    margin: 1.4rem auto 0;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    color: var(--ink-soft);
+    line-height: 1.7;
+    opacity: 0;
+    animation: rise 0.9s ease-out 0.6s forwards;
+  }
+
+  .hero .scroll-hint{
+    margin-top: 3.2rem;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    text-decoration: none;
+    opacity: 0;
+    animation: rise 0.9s ease-out 1s forwards;
+    transition: color 0.3s ease;
+  }
+
+  .hero .scroll-hint:hover{ color: var(--coral); }
+
+  .hero .scroll-hint .line{
+    width: 1px;
+    height: 32px;
+    background: var(--ink-soft);
+    animation: stretch 2.2s ease-in-out infinite;
+    transform-origin: top;
+  }
+
+  @keyframes stretch{
+    0%, 100% { transform: scaleY(0.6); opacity: 0.5; }
+    50%      { transform: scaleY(1);   opacity: 1;   }
+  }
+
+  .notice{
+    background: linear-gradient(180deg, var(--cream) 0%, var(--peach) 100%);
+  }
+
+  .notice .frame{ max-width: 600px; }
+
+  .notice .kicker{
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--coral);
+    font-size: clamp(1.15rem, 2.6vw, 1.4rem);
+    margin-bottom: 1.1rem;
+  }
+
+  .notice p{
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+    line-height: 1.8;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    text-align: left;
+  }
+
+  .gallery{ background: var(--peach); }
+
+  .gallery h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--plum);
+    font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+    margin-bottom: 2rem;
+  }
+
+  .gallery .row{
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 640px;
+  }
+
+  .gallery .shot{
+    width: min(260px, 42vw);
+  }
+
+  .gallery .shot .frame{
+    aspect-ratio: 4 / 5;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 14px 30px -16px rgba(74, 59, 82, 0.4);
+    border: 3px solid var(--cream);
+  }
+
+  .gallery .shot img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .gallery .shot .caption{
+    margin-top: 0.7rem;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .tease-flip{
+    background: var(--cream);
+  }
+
+  .tease-flip h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--plum);
+    font-size: clamp(1.5rem, 4.2vw, 2rem);
+    margin-bottom: 2rem;
+  }
+
+  .flip-card{
+    position: relative;
+    width: min(340px, 88vw);
+    height: 170px;
+  }
+
+  .flip-face{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 18px;
+    cursor: pointer;
+    backface-visibility: hidden;
+    transition: transform 0.6s ease;
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    line-height: 1.5;
+  }
+
+  .flip-front{
+    background: var(--coral);
+    color: var(--cream);
+    transform: rotateY(0deg);
+  }
+
+  .flip-front .tap-hint{
+    display: block;
+    margin-top: 0.6rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    letter-spacing: 0.04em;
+  }
+
+  .flip-back{
+    background: var(--plum);
+    color: var(--cream);
+    transform: rotateY(180deg);
+  }
+
+  #flip1:checked ~ .flip-front{ transform: rotateY(180deg); }
+  #flip1:checked ~ .flip-back{ transform: rotateY(360deg); }
+
+  .tease-quiz{
+    background: var(--peach);
+  }
+
+  .tease-quiz .box{ max-width: 480px; width: 100%; }
+
+  .tease-quiz h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    color: var(--plum);
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    margin-bottom: 1.8rem;
+    line-height: 1.3;
+  }
+
+  .quiz-options{
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .quiz-option{
+    display: inline-block;
+    background: var(--cream);
+    color: var(--plum);
+    border: 1px solid var(--coral);
+    padding: 0.8rem 1.5rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .quiz-option:hover{
+    background: var(--coral);
+    color: var(--cream);
+    transform: translateY(-2px);
+  }
+
+  #qa:checked ~ .quiz-options label[for="qa"],
+  #qb:checked ~ .quiz-options label[for="qb"],
+  #qc:checked ~ .quiz-options label[for="qc"]{
+    background: var(--coral);
+    color: var(--cream);
+  }
+
+  .quiz-result{
+    display: none;
+    margin-top: 1.8rem;
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 1.6rem;
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+  }
+
+  #qa:checked ~ .result-a,
+  #qb:checked ~ .result-b,
+  #qc:checked ~ .result-c{
+    display: block;
+  }
+
+  .tease-cafe{
+    background: var(--plum);
+    color: var(--cream);
+  }
+
+  .tease-cafe .box{ max-width: 460px; width: 100%; }
+
+  .tease-cafe h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 4.5vw, 2.3rem);
+    margin-bottom: 2rem;
+    line-height: 1.25;
+  }
+
+  .cafe-choices{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cafe-choices label{
+    border: none;
+    padding: 0.85rem 2rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    display: inline-block;
+  }
+
+  .cafe-yes{ background: var(--gold); color: var(--plum); }
+  .cafe-yes:hover{ transform: translateY(-2px) scale(1.03); }
+
+  .cafe-no{
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid rgba(255,246,240,0.5);
+  }
+  .cafe-no:hover{ border-color: var(--cream); }
+
+  .cafe-result{
+    display: none;
+    background: var(--cream);
+    color: var(--ink);
+    border-radius: 18px;
+    padding: 2.2rem 2rem;
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+  }
+
+  #cafe-yes:checked ~ .cafe-choices,
+  #cafe-no:checked ~ .cafe-choices{ display: none; }
+
+  #cafe-yes:checked ~ .cafe-result-yes,
+  #cafe-no:checked ~ .cafe-result-no{ display: block; }
+
+  footer{
+    text-align: center;
+    padding: 3rem 6vw 4rem;
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    position: relative;
+    z-index: 1;
+    background: var(--plum);
+  }
+
+  @media (max-width: 480px){
+    section{ padding: 10vh 7vw; }
+    .notice p{ text-align: left; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    .hero .photo-frame, .hero .tag, .hero h1, .hero p, .hero .scroll-hint{
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+    .dot{ display: none; }
+    .preloader{ animation-duration: 0.01ms; }
+  }
+</style>
+</head>
+<body>
+
+<div class="preloader" aria-hidden="true">
+  <div class="loader">
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="text"><span>Pour toi seule Chabrina</span></div>
+    <div class="line"></div>
+  </div>
+</div>
+
+<div class="drift-layer" aria-hidden="true">
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<main>
+
+  <section class="hero">
+    <div class="photo-frame">
+      <!-- PHOTO 1 : portrait dans le hero -->
+      <img alt="Nirina" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FFDCC9'/%3E%3Ctext x='50' y='58' font-size='30' text-anchor='middle' fill='%23E8734F'%3E%E2%98%BA%3C/text%3E%3C/svg%3E">
+    </div>
+    <span class="tag">salut, c'est encore moi</span>
+    <h1>Coucou, <em>Nirina</em></h1>
+    <!-- [À PERSONNALISER] la phrase d'intro sous le titre -->
+    <p>J'avais un truc à te montrer. Rien de sérieux, promis. Enfin... un peu quand même.</p>
+    <a href="#notice" class="scroll-hint">
+      <span>Suite</span>
+      <span class="line" aria-hidden="true"></span>
+    </a>
+  </section>
+
+  <section class="notice" id="notice">
+    <div class="frame">
+      <p class="kicker">Nirina,</p>
+      <!-- [À PERSONNALISER] le petit mot d'introduction -->
+      <p>Je me suis dit qu'un message texte, c'était un peu trop banal pour ce que j'avais envie de te dire. Alors voilà, j'ai préféré coder un petit site, parce que oui, je suis probablement du genre à faire les choses différemment.</p>
+      <p>Rien de compliqué : je passe un bon moment avec toi, j'aime bien nos discussions, et j'avais juste envie que tu le saches — sans trop de pression, promis.</p>
+    </div>
+  </section>
+
+  <section class="gallery">
+    <h2>Quelques images</h2>
+    <div class="row">
+      <div class="shot">
+        <div class="frame">
+          <!-- PHOTO 2 : galerie, image de gauche -->
+          <img alt="photo 2" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 125'%3E%3Crect width='100' height='125' fill='%23FBEFE6'/%3E%3Ctext x='50' y='68' font-size='16' text-anchor='middle' fill='%23E8734F'%3Ephoto%3C/text%3E%3C/svg%3E">
+        </div>
+        <p class="caption"><!-- [À PERSONNALISER] légende --> un souvenir qui me fait sourire</p>
+      </div>
+      <div class="shot">
+        <div class="frame">
+          <!-- PHOTO 3 : galerie, image de droite -->
+          <img alt="photo 3" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 125'%3E%3Crect width='100' height='125' fill='%23FBEFE6'/%3E%3Ctext x='50' y='68' font-size='16' text-anchor='middle' fill='%23E8734F'%3Ephoto%3C/text%3E%3C/svg%3E">
+        </div>
+        <p class="caption"><!-- [À PERSONNALISER] légende --> celle-là aussi, forcément</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="tease-flip">
+    <h2>Un petit secret</h2>
+    <div class="flip-card">
+      <input type="checkbox" id="flip1" class="vh-input">
+      <label for="flip1" class="flip-face flip-front">
+        Un fait sur toi
+        <span class="tap-hint">(appuie pour voir)</span>
+      </label>
+      <label for="flip1" class="flip-face flip-back">
+        <!-- [À PERSONNALISER] le petit secret / la taquinerie -->
+        Tu ne le sais peut-être pas, mais tu me fais sourire tout seul devant mon téléphone. C'est un peu gênant, en fait.
+      </label>
+    </div>
+  </section>
+
+  <section class="tease-quiz">
+    <div class="box">
+      <h2>Si je devais te décrire en un mot...</h2>
+      <input type="radio" name="quiz" id="qa" class="vh-input">
+      <input type="radio" name="quiz" id="qb" class="vh-input">
+      <input type="radio" name="quiz" id="qc" class="vh-input">
+      <div class="quiz-options">
+        <label for="qa" class="quiz-option">Marrante</label>
+        <label for="qb" class="quiz-option">Intense</label>
+        <label for="qc" class="quiz-option">Dangereuse</label>
+      </div>
+      <!-- [À PERSONNALISER] les 3 réponses ci-dessous -->
+      <div class="quiz-result result-a">Marrante, clairement. Mais tu le sais déjà, non ?</div>
+      <div class="quiz-result result-b">Intense, oui. Dans le bon sens du terme, rassure-toi.</div>
+      <div class="quiz-result result-c">Dangereuse... pour ma concentration au travail, surtout.</div>
+    </div>
+  </section>
+
+  <section class="tease-cafe">
+    <div class="box">
+      <input type="radio" name="cafe" id="cafe-yes" class="vh-input">
+      <input type="radio" name="cafe" id="cafe-no" class="vh-input">
+
+      <h2>Un café un de ces jours, toi et moi ?</h2>
+      <div class="cafe-choices">
+        <label for="cafe-yes" class="cafe-yes">Oui</label>
+        <label for="cafe-no" class="cafe-no">Non</label>
+      </div>
+
+      <!-- [À PERSONNALISER] les 2 réponses ci-dessous -->
+      <div class="cafe-result cafe-result-yes">Chouette. Je te tiens au courant très vite. 😏</div>
+      <div class="cafe-result cafe-result-no">Dommage... mais je vais probablement retenter ma chance un de ces jours.</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>fait avec le sourire, pour Nirina.</footer>
+
+
+  <audio id="bg-music" loop>
+    <source src="Ben.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    window.addEventListener('click', () => {
+      const audio = document.getElementById('bg-music');
+      // Vérifie si l'audio n'est pas déjà en train de jouer
+      if (audio.paused) {
+        audio.play().catch(error => console.log("Lecture automatique bloquée :", error));
+      }
+    }, { once: true })
+  </script>
+</body>
+</html>
